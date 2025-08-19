@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
+import movieRoutes from './routes/movieRoutes';
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ mongoose.connect(process.env.MONGO_URI as string)
   .catch(err => console.error('MongoDB connection error:', err));
 
 app.use('/api/auth', authRoutes);
+app.use('/api/movies', movieRoutes);
 
 
 const PORT = process.env.PORT || 5000;
