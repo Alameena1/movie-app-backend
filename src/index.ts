@@ -1,12 +1,19 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import cors from 'cors'; // Add this import
 import authRoutes from './routes/authRoutes';
 import movieRoutes from './routes/movieRoutes';
 
 dotenv.config();
 
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:3000', 
+  credentials: true, 
+}));
+
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI as string)
@@ -15,7 +22,6 @@ mongoose.connect(process.env.MONGO_URI as string)
 
 app.use('/api/auth', authRoutes);
 app.use('/api/movies', movieRoutes);
-
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

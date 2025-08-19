@@ -68,3 +68,22 @@ export const listMovies = async (req: AuthRequest, res: Response) => {
     res.status(500).json({ message: 'Error fetching saved movies', error });
   }
 };
+
+export const deleteMovie = async (req: AuthRequest, res: Response) => {
+  const { imdbID } = req.params;
+
+  try {
+    const user = await User.findById(req.user?.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Remove the movie from savedMovies
+    user.savedMovies = user.savedMovies.filter(movie => movie.imdbID !== imdbID);
+    await user.save();
+    
+    res.json({ message: 'Movie removed successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error removing movie', error });
+  }
+};
